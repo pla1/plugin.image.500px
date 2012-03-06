@@ -26,11 +26,17 @@ def createListing():
     photos = feedJson['photos']
     for photoFromFeed in photos:
       id = photoFromFeed['id']
-      photoData = urllib2.urlopen(basePhotoUrl.format(photoid=id))
-      photoJson = json.load(photoData)
-      photoDetails = photoJson['photo']
-      listItem = xbmcgui.ListItem(photoDetails['name'], '', '', '', '')
-      xbmcplugin.addDirectoryItem(thisPlugin, photoDetails['image_url'], listItem, False, quantity)
+      try: 
+        photoData = urllib2.urlopen(basePhotoUrl.format(photoid=id))
+        photoJson = json.load(photoData)
+        photoDetails = photoJson['photo']
+        listItem = xbmcgui.ListItem(photoDetails['name'], '', '', '', '')
+        xbmcplugin.addDirectoryItem(thisPlugin, photoDetails['image_url'], listItem, False, quantity)
+      except urllib2.HTTPError, e:
+        print "**** HTTP ERROR: " + str(e.code)
+        print e.msg
+        print e.headers
+        print e.fp.read()
   xbmcplugin.endOfDirectory(handle=thisPlugin, succeeded=True, updateListing=False, cacheToDisc=True)
 createListing()
 

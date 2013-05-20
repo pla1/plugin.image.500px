@@ -1,44 +1,64 @@
-import urllib2
 
-import simplejson as json
+import utils
+import utils.xbmc
+
 import xbmcgui
 import xbmcplugin
-baseFeedUrl = "https://api.500px.com/v1/photos?feature={feature}&page={page}&consumer_key=LvUFQHMQgSlaWe3aRQot6Ct5ZC2pdTMyTLS0GMfF"
-basePhotoUrl = " https://api.500px.com/v1/photos/{photoid}?image_size=4&consumer_key=LvUFQHMQgSlaWe3aRQot6Ct5ZC2pdTMyTLS0GMfF"
-thisPlugin = int(sys.argv [1])
-featureNames = ['popular', 'upcoming', 'editors', 'fresh_today', 'fresh_yesterday', 'fresh_week']
-index = int(xbmcplugin.getSetting(thisPlugin, 'feature'))
-featureName = featureNames[index]
-PHOTOS_PER_PAGE = 20
-def createListing():
-  global featureName
-  global thisPlugin
-  quantityIndex = int(xbmcplugin.getSetting(thisPlugin, 'quantity')) + 1
-  quantity = quantityIndex * PHOTOS_PER_PAGE
-  print '**** quantity: ' + str(quantity)
-  pageNumber = 1
-  while pageNumber <= quantityIndex:
-    feedUrl = baseFeedUrl.format(feature=featureName, page=pageNumber)
-    print '**** FEED URL:' + feedUrl
-    pageNumber = pageNumber + 1
-    feedData = urllib2.urlopen(feedUrl)
-    feedJson = json.load(feedData)
-    photos = feedJson['photos']
-    for photoFromFeed in photos:
-      id = photoFromFeed['id']
-      try: 
-        photoData = urllib2.urlopen(basePhotoUrl.format(photoid=id))
-        photoJson = json.load(photoData)
-        photoDetails = photoJson['photo']
-        listItem = xbmcgui.ListItem(photoDetails['name'], '', '', '', '')
-        xbmcplugin.addDirectoryItem(thisPlugin, photoDetails['image_url'], listItem, False, quantity)
-      except urllib2.HTTPError, e:
-        print "**** HTTP ERROR: " + str(e.code)
-        print e.msg
-        print e.headers
-        print e.fp.read()
-  xbmcplugin.endOfDirectory(handle=thisPlugin, succeeded=True, updateListing=False, cacheToDisc=True)
-createListing()
+
+from fivehundredpx.client import FiveHundredPXAPI
+
+_CONSUMER_KEY = 'LvUFQHMQgSlaWe3aRQot6Ct5ZC2pdTMyTLS0GMfF'
+_RPP = int(xbmcplugin.getSetting(utils.xbmc.addon_handle, 'quantity'))
+API = FiveHundredPXAPI()
+
+
+class Image(object):
+    def __init__(self, photo_json):
+        self.name= photo_json['name']
+        self.thumb_url = photo_json['images'][0]['url']
+        self.url = photo_json['images'][1]['url']
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+
+def feature():
+    def get_images(feature):
+        resp = API.photos(feature=feature, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4])
+        return map(Image, resp['photos'])
+
+    feature = utils.xbmc.get_addon_params()['feature']
+    for image in get_images(feature):
+        utils.xbmc.add_image(image)
+    utils.xbmc.end_of_directory()
+
+
+def root():
+    features = (
+        "editors",
+        "popular",
+        "upcoming",
+        "fresh_today",
+        "fresh_yesterday"
+    )
+
+    for feature in features:
+        url = utils.xbmc.encode_child_url('feature', feature=feature)
+        utils.xbmc.add_dir(feature, url)
+    utils.xbmc.end_of_directory()
+
+
+try:
+    modes = {
+        'feature': feature
+    }
+
+    params = utils.xbmc.get_addon_params()
+    mode_name = params['mode']
+    modes[mode_name]()
+except KeyError:
+    root()
+
 
 
 

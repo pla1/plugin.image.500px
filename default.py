@@ -23,13 +23,25 @@ class Image(object):
 
 
 def feature():
-    def get_images(feature):
-        resp = API.photos(feature=feature, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4])
-        return map(Image, resp['photos'])
+    def get_page(params):
+        try:
+            return int(params['page'])
+        except KeyError:
+            return 1
 
-    feature = utils.xbmc.get_addon_params()['feature']
-    for image in get_images(feature):
+    params = utils.xbmc.addon_params
+    feature = params['feature']
+    page = get_page(params)
+    resp = API.photos(feature=feature, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4], page=page)
+
+    for image in map(Image, resp['photos']):
         utils.xbmc.add_image(image)
+
+    if resp['current_page'] != resp['total_pages']:
+        next_page = page + 1
+        url = utils.xbmc.encode_child_url('feature', feature=feature, page=next_page)
+        utils.xbmc.add_dir('Next page', url)
+
     utils.xbmc.end_of_directory()
 
 
@@ -53,13 +65,8 @@ try:
         'feature': feature
     }
 
-    params = utils.xbmc.get_addon_params()
+    params = utils.xbmc.addon_params
     mode_name = params['mode']
     modes[mode_name]()
 except KeyError:
     root()
-
-
-
-
-

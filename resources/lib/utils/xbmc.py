@@ -10,6 +10,8 @@ import xbmcplugin
 addon_path = os.getcwd()
 addon_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
+addon_params = dict(urlparse.parse_qsl(sys.argv[2][1:]))
+
 
 def encode_child_url(mode, **kwargs):
     params = {
@@ -20,9 +22,6 @@ def encode_child_url(mode, **kwargs):
     return "%s?&%s" % (addon_url, urllib.urlencode(params))
 
 
-def get_addon_params():
-    params = sys.argv[2][0:]
-    return dict(urlparse.parse_qsl(params[1:]))
 
 
 def add_dir(name, url):

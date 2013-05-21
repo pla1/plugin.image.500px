@@ -22,14 +22,13 @@ def encode_child_url(mode, **kwargs):
     return "%s?&%s" % (addon_url, urllib.urlencode(params))
 
 
-
-
 def add_dir(name, url):
-    def humanize(str):
-        return str.replace('_', ' ')
+    def enhance_name(value):
+        return value.replace('_', ' ').title()
 
+    name = enhance_name(name)
     item = xbmcgui.ListItem(name)
-    item.setInfo(type="Image", infoLabels={"Title": humanize(name)})
+    item.setInfo(type="Image", infoLabels={"Title": name})
     xbmcplugin.addDirectoryItem(addon_handle, url, item, True)
 
 

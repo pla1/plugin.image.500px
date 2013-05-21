@@ -2,6 +2,7 @@
 import utils
 import utils.xbmc
 
+import xbmc
 import xbmcgui
 import xbmcplugin
 
@@ -45,6 +46,33 @@ def feature():
     utils.xbmc.end_of_directory()
 
 
+def search():
+    def getTerm():
+        kb = xbmc.Keyboard(heading='Search 500px')
+        kb.doModal()
+        return kb.getText()
+
+    params = utils.xbmc.addon_params
+
+    if 'term' not in params:
+        term = getTerm()
+        page = 1
+    else:
+        term = params['term']
+        page = int(params['page'])
+
+    resp = API.photos_search(term=term, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4], page=page)
+    for image in map(Image, resp['photos']):
+        utils.xbmc.add_image(image)
+
+    if resp['current_page'] != resp['total_pages']:
+        next_page = page + 1
+        url = utils.xbmc.encode_child_url('search', term=term, page=next_page)
+        utils.xbmc.add_dir('Next page', url)
+
+    utils.xbmc.end_of_directory()
+
+
 def root():
     features = (
         "editors",
@@ -57,12 +85,17 @@ def root():
     for feature in features:
         url = utils.xbmc.encode_child_url('feature', feature=feature)
         utils.xbmc.add_dir(feature, url)
+
+    url = utils.xbmc.encode_child_url('search')
+    utils.xbmc.add_dir('Search', url)
+
     utils.xbmc.end_of_directory()
 
 
 try:
     modes = {
-        'feature': feature
+        'feature': feature,
+        'search': search,
     }
 
     params = utils.xbmc.addon_params

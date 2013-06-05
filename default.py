@@ -9,7 +9,7 @@ import xbmcplugin
 from fivehundredpx.client import FiveHundredPXAPI
 
 _CONSUMER_KEY = 'LvUFQHMQgSlaWe3aRQot6Ct5ZC2pdTMyTLS0GMfF'
-_RPP = int(xbmcplugin.getSetting(utils.xbmc.addon_handle, 'quantity'))
+_RPP = int(xbmcplugin.getSetting(utils.xbmc.addon_handle, 'rpp'))
 API = FiveHundredPXAPI()
 
 

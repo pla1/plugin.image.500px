@@ -3,7 +3,7 @@
        provider-name="Patrick L Archibald [patrick.archibald@gmail.com], Clément MATHIEU [clement@unportant.info]">
   <requires>
     <import addon="script.module.simplejson" version="2.0.10"/>
-    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="xbmc.python" version="2.1.1"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>image</provides>

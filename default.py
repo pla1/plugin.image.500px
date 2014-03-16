@@ -18,6 +18,8 @@ class Image(object):
         self.name = photo_json['name']
         self.thumb_url = photo_json['images'][0]['url']
         self.url = photo_json['images'][1]['url']
+        self.userid = photo_json['user']['username']
+        self.userfullname = photo_json['user']['fullname']
 
     def __repr__(self):
         return str(self.__dict__)
@@ -58,7 +60,7 @@ def search():
         page = 1
     else:
         term = params['term']
-        page = int(params['page'])
+        page = int(params.get('page', 1))
 
     resp = API.photos_search(term=term, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4], page=page)
     for image in map(Image, resp['photos']):
@@ -66,7 +68,8 @@ def search():
 
     if resp['current_page'] != resp['total_pages']:
         next_page = page + 1
-        url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page)
+        ctxsearch = params.get('ctxsearch', None)
+        url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page, ctxsearch=ctxsearch)
         fivehundredpxutils.xbmc.add_dir('Next page', url)
 
     fivehundredpxutils.xbmc.end_of_directory()
@@ -147,5 +150,5 @@ try:
     params = fivehundredpxutils.xbmc.addon_params
     mode_name = params['mode']
     modes[mode_name]()
-except KeyError:
+except:
     features()

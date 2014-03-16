@@ -150,5 +150,5 @@ try:
     params = fivehundredpxutils.xbmc.addon_params
     mode_name = params['mode']
     modes[mode_name]()
-except:
+except KeyError:
     features()

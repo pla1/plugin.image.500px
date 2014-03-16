@@ -15,7 +15,7 @@ API = FiveHundredPXAPI()
 
 class Image(object):
     def __init__(self, photo_json):
-        self.name= photo_json['name']
+        self.name = photo_json['name']
         self.thumb_url = photo_json['images'][0]['url']
         self.url = photo_json['images'][1]['url']
 
@@ -46,12 +46,15 @@ def search():
     def getTerm():
         kb = xbmc.Keyboard(heading='Search 500px')
         kb.doModal()
-        return kb.getText()
+        text = kb.getText()
+        return text if kb.isConfirmed() and text else None
 
     params = fivehundredpxutils.xbmc.addon_params
 
     if 'term' not in params:
         term = getTerm()
+        if term == None:
+            return
         page = 1
     else:
         term = params['term']

@@ -78,7 +78,8 @@ def features():
         "popular",
         "upcoming",
         "fresh_today",
-        "fresh_yesterday"
+        "fresh_yesterday",
+        "fresh_week"
     )
 
     for feature in features:
@@ -98,7 +99,7 @@ def categories():
         'Animals': 11,
         'Black and White': 5,
         'Celebrities': 1,
-        'City': 9,
+        'City and Architecture': 9,
         'Commercial': 15,
         'Concert': 16,
         'Family': 20,
@@ -119,7 +120,7 @@ def categories():
         'Transportation': 26,
         'Travel': 13,
         'Underwater': 22,
-        'Urban': 27,
+        'Urban Exploration': 27,
         'Wedding': 25,
     }
 
@@ -148,3 +149,4 @@ try:
     modes[mode_name]()
 except KeyError:
     features()
+

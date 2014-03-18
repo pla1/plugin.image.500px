@@ -3,8 +3,12 @@ import fivehundredpxutils
 import fivehundredpxutils.xbmc
 
 import xbmc
+import xbmcaddon
 import xbmcgui
 import xbmcplugin
+
+__addon__       = xbmcaddon.Addon()
+__addonname__   = __addon__.getAddonInfo('name')
 
 from fivehundredpx.client import FiveHundredPXAPI
 
@@ -63,13 +67,21 @@ def search():
         page = int(params.get('page', 1))
 
     resp = API.photos_search(term=term, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4], page=page)
+    
+    if (resp['total_items'] == 0):
+        msg = "Your search for '%s' returned no matches." % term
+        xbmc.executebuiltin('Notification(%s, %s)' % (__addonname__, msg))
+        return
+    
     for image in map(Image, resp['photos']):
         fivehundredpxutils.xbmc.add_image(image)
 
     if resp['current_page'] != resp['total_pages']:
         next_page = page + 1
-        ctxsearch = params.get('ctxsearch', None)
-        url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page, ctxsearch=ctxsearch)
+        if 'ctxsearch' in params:
+            url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page, ctxsearch=True)
+        else:
+            url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page)
         fivehundredpxutils.xbmc.add_dir('Next page', url)
 
     fivehundredpxutils.xbmc.end_of_directory()

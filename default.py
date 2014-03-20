@@ -69,8 +69,7 @@ def search():
     resp = API.photos_search(term=term, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4], page=page)
     
     if (resp['total_items'] == 0):
-        msg = "Your search for '%s' returned no matches." % term
-        xbmc.executebuiltin('Notification(%s, %s)' % (__addonname__, msg))
+        xbmc.executebuiltin('Notification(%s, %s)' % (__addonname__, "Your search returned no matches."))
         return
     
     for image in map(Image, resp['photos']):

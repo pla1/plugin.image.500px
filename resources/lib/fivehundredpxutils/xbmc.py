@@ -34,6 +34,13 @@ def add_dir(name, url):
 
 def add_image(image):
     item = xbmcgui.ListItem(image.name, thumbnailImage=image.thumb_url)
+    
+    if not 'ctxsearch' in addon_params:
+        label = "More from %s" % image.userfullname # i18n
+        url = encode_child_url('search', term=image.userid, ctxsearch=True)
+        action = "XBMC.Container.Update(%s)" % url
+        item.addContextMenuItems([(label, action,)])
+            
     xbmcplugin.addDirectoryItem(addon_handle, image.url, item)
 
 def end_of_directory():

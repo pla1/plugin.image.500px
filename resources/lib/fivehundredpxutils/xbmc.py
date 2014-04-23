@@ -6,8 +6,10 @@ import urlparse
 
 import xbmcgui
 import xbmcplugin
+import xbmcaddon
 
-addon_path = os.getcwd()
+__addon__ = xbmcaddon.Addon()
+addon_path = __addon__.getAddonInfo('path')
 addon_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 addon_params = dict(urlparse.parse_qsl(sys.argv[2][1:]))

@@ -12,11 +12,16 @@
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <summary lang="en">View photos from http://500px.com.</summary>
-    <description>
+    <description lang="en">
       View photos from http://500px.com. In the addon settings you can change the quantity of photos per page to
       view 20 (default), 40, 60, 80, 100. This addon was created by Patrick L Archibald at http://pla1.net.
       The source for this addon can be found at https://github.com/pla1/plugin.image.500px.
     </description> 
     <license>GPL 2.0</license>
+    <language>en</language>
+    <forum>https://github.com/pla1/plugin.image.500px/issues</forum>
+    <website>https://github.com/pla1/plugin.image.500px</website>
+    <source>https://github.com/pla1/plugin.image.500px</source>
+    <email>Patrick.Archibald@gmail.com</email>
   </extension>
 </addon>

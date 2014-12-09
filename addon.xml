@@ -13,7 +13,7 @@
     <platform>all</platform>
     <summary lang="en">View photos from http://500px.com.</summary>
     <description lang="en">
-      View photos from http://500px.com. This addon was created by Patrick L Archibald. The source for this addon can be found at https://github.com/pla1/plugin.image.500px.
+      View photos from http://500px.com. This addon was created by Patrick L Archibald (PLA). The source for this addon can be found at https://github.com/pla1/plugin.image.500px.
     </description> 
     <license>GPL 2.0</license>
     <language>en</language>

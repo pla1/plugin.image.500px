@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.500px" name="500px" version="0.2.3"
+<addon id="plugin.image.500px" name="500px" version="0.2.4"
        provider-name="Patrick L Archibald [patrick.archibald@gmail.com], Clément MATHIEU [clement@unportant.info]">
   <requires>
     <import addon="script.module.simplejson" version="2.0.10"/>
@@ -14,7 +14,7 @@
     <summary lang="en">View photos from http://500px.com.</summary>
     <description lang="en">
       View photos from http://500px.com. This addon was created by Patrick L Archibald (PLA). The source for this addon can be found at https://github.com/pla1/plugin.image.500px.
-    </description> 
+    </description>
     <license>GPL 2.0</license>
     <language>en</language>
     <forum>https://github.com/pla1/plugin.image.500px/issues</forum>

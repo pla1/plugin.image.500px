@@ -99,6 +99,7 @@ def features():
     features = (
         "editors",
         "popular",
+        "highest_rated",
         "upcoming",
         "fresh_today",
         "fresh_yesterday",

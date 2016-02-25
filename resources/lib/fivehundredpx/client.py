@@ -72,3 +72,16 @@ class FiveHundredPXAPI(object):
     collections_post   = bind_api(path='/collections', require_auth=True, method='POST', as_query=True)
     collections_update = bind_api(path='/collections/{id}', require_auth=True, method='PUT', allowed_params=['id'], as_query=True)
     collections_delete = bind_api(path='/collections/{id}', require_auth=True, method='DELETE', allowed_params=['id'], as_query=True)
+
+    #### Galleries API
+    # https://github.com/500px/api-documentation/blob/master/endpoints/galleries
+    galleries    = bind_api(path='/users/{user_id}/galleries', allowed_params=['user_id'])
+    galleries_id = bind_api(path='/users/{user_id}/galleries/{id}', allowed_params=['user_id', 'id'])
+    galleries_id_items = bind_api(path='/users/{user_id}/galleries/{id}/items', allowed_params=['user_id', 'id'])
+    # galleries_id_share_url = bind_api(path='/users/{user_id}/galleries/{id}/share_url', require_auth=True, allowed_params=['user_id', 'id'])
+    # galleries_post = bind_api(path='/users/{user_id}/galleries', require_auth=True, method='POST', allowed_params=['user_id'], as_query=True)
+    # galleries_id_update = None
+    # galleries_id_items_update = None 
+    # galleries_id_reposition_update = None
+    # galleries_id_delete = None
+

@@ -29,7 +29,7 @@ class Image(object):
         self.name = photo_json['name']
         self.thumb_url = photo_json['images'][0]['url']
         self.url = photo_json['images'][1]['url']
-        self.userid = photo_json['user']['username']
+        self.username = photo_json['user']['username']
         self.userfullname = photo_json['user']['fullname']
 
     def __repr__(self):

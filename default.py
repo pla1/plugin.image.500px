@@ -7,6 +7,7 @@ import xbmcplugin
 
 __addon__       = xbmcaddon.Addon()
 __addonname__   = __addon__.getAddonInfo('name')
+__icon__ = __addon__.getAddonInfo('icon')
 __cwd__        = __addon__.getAddonInfo('path').decode("utf-8")
 __resource__   = xbmc.translatePath( os.path.join( __cwd__, 'resources', 'lib' ).encode("utf-8") ).decode("utf-8")
 sys.path.append(__resource__)
@@ -77,7 +78,7 @@ def search():
     resp = API.photos_search(term=term, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[_TMBSIZE, _IMGSIZE], page=page)
     
     if (resp['total_items'] == 0):
-        xbmc.executebuiltin('Notification(%s, %s)' % (__addonname__, "Your search returned no matches."))
+        xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, "Your search returned no matches.",__icon__))
         return
     
     for image in map(Image, resp['photos']):

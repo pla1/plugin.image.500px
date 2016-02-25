@@ -22,6 +22,7 @@ _LIMITP = str(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'limit
 _MAXP = int(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'maxpages'))
 _IMGSIZE = int(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'imgsize'))
 _TMBSIZE = int(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'tmbsize'))
+_USERNAME = str(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'username'))
 API = FiveHundredPXAPI()
 
 

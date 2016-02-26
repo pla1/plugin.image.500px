@@ -23,6 +23,8 @@ _MAXP = int(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'maxpage
 _IMGSIZE = int(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'imgsize'))
 _TMBSIZE = int(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'tmbsize'))
 _USERNAME = str(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'username'))
+_TMBFOLDERS = str(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'tmbfolders'))
+
 API = FiveHundredPXAPI()
 
 
@@ -61,7 +63,8 @@ class User(object):
             self.id = self.info['user']['id']
             self.username = self.info['user']['username']
             self.fullname = self.info['user']['fullname']
-            self.picture = self.info['user']['userpic_url']
+            if _TMBFOLDERS == 'true':
+                self.picture = self.info['user']['userpic_url']
         except Exception, e:
             _lookupvar = None
             if self._lookupusername:
@@ -254,7 +257,7 @@ def list_galleries():
     for gallery in resp['galleries']:
         url = fivehundredpxutils.xbmc.encode_child_url('gallery', gallery_id=gallery['id'], user_id=gallery['user_id'])
         cover_photo = None
-        if gallery['cover_photo']:
+        if (_TMBFOLDERS == 'true' and gallery['cover_photo']):
             cover_photo = gallery['cover_photo'][0]['url']
         fivehundredpxutils.xbmc.add_dir(gallery['name'], url, cover_photo)
 
@@ -303,7 +306,10 @@ def friends():
     for friend in resp['friends']:
         #xbmc.log(__addonname__+' - friend info '+str(friend), 0)      
         url = fivehundredpxutils.xbmc.encode_child_url('user_features', user_id=friend['id'])
-        fivehundredpxutils.xbmc.add_dir(friend['fullname'], url, friend['userpic_url'])
+        userpicture = None
+        if _TMBFOLDERS == 'true':
+            userpicture = friend['userpic_url']
+        fivehundredpxutils.xbmc.add_dir(friend['fullname'], url, userpicture)
 
     if not (_LIMITP == 'true' and (resp['page'] >= _MAXP)):
        if resp['page'] < resp['friends_pages']:

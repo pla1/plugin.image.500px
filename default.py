@@ -76,7 +76,7 @@ class User(object):
                 xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Could not find user '+str(_lookupvar),__icon__))
                 xbmc.log(__addonname__+' - '+'Could not find user (userid/username: '+str(self._lookupid)+'/'+str(self._lookupusername)+')' , xbmc.LOGERROR)
             else:
-                xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Error from API: '+str(e),__icon__))
+                xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Error from API: '+str(e.status),__icon__))
                 xbmc.log(__addonname__+' - Error from API: '+str(e), xbmc.LOGERROR)
 
 
@@ -90,8 +90,13 @@ def feature():
     page = int(params.get('page', 1))
     user_id = params.get('user_id', None)
 
-    resp = API.photos(feature=feature, only=category, user_id=user_id, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[_TMBSIZE, _IMGSIZE], page=page)
-
+    try:
+        resp = API.photos(feature=feature, only=category, user_id=user_id, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[_TMBSIZE, _IMGSIZE], page=page)
+    except Exception, e:
+        xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Error from API: '+str(e.status),__icon__))
+        xbmc.log(__addonname__+' - Error from API: '+str(e), xbmc.LOGERROR)
+        return
+    
     for image in map(Image, resp['photos']):
         fivehundredpxutils.xbmc.add_image(image)
 
@@ -123,7 +128,12 @@ def search():
         term = params['term']
         page = int(params.get('page', 1))
 
-    resp = API.photos_search(term=term, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[_TMBSIZE, _IMGSIZE], page=page)
+    try:
+        resp = API.photos_search(term=term, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[_TMBSIZE, _IMGSIZE], page=page)
+    except Exception, e:
+        xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Error from API: '+str(e.status),__icon__))
+        xbmc.log(__addonname__+' - Error from API: '+str(e), xbmc.LOGERROR)
+        return
     
     if (resp['total_items'] == 0):
         xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, "Your search returned no matches.",__icon__))
@@ -248,7 +258,12 @@ def list_galleries():
     page = int(params.get('page', 1))
     user_id = params.get('user_id', None)
     
-    resp = API.galleries(consumer_key=_CONSUMER_KEY, user_id=user_id, sort='position',sort_direction='asc', include_cover=1, cover_size=_TMBSIZE, page=page, rpp=_RPP)
+    try:
+        resp = API.galleries(consumer_key=_CONSUMER_KEY, user_id=user_id, sort='position',sort_direction='asc', include_cover=1, cover_size=_TMBSIZE, page=page, rpp=_RPP)
+    except Exception, e:
+        xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Error from API: '+str(e.status),__icon__))
+        xbmc.log(__addonname__+' - Error from API: '+str(e), xbmc.LOGERROR)
+        return
 
     if (resp['total_items'] == 0):
         xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, "No galleries found for "+user_id, __icon__))
@@ -277,7 +292,12 @@ def gallery():
     gallery_id = params['gallery_id']
     page = int(params.get('page', 1))
 
-    resp = API.galleries_id_items(id=gallery_id, user_id=user_id, sort='position', sort_direction='asc', rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[_TMBSIZE, _IMGSIZE], page=page)
+    try:
+        resp = API.galleries_id_items(id=gallery_id, user_id=user_id, sort='position', sort_direction='asc', rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[_TMBSIZE, _IMGSIZE], page=page)
+    except Exception, e:
+        xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Error from API: '+str(e.status),__icon__))
+        xbmc.log(__addonname__+' - Error from API: '+str(e), xbmc.LOGERROR)
+        return
 
     for image in map(Image, resp['photos']):
         fivehundredpxutils.xbmc.add_image(image)
@@ -297,8 +317,13 @@ def friends():
     page = int(params.get('page', 1))
     user_id = params.get('user_id', None)
 
-    resp = API.users_friends(consumer_key=_CONSUMER_KEY, id=user_id, page=page, rpp=_RPP)
-
+    try:
+        resp = API.users_friends(consumer_key=_CONSUMER_KEY, id=user_id, page=page, rpp=_RPP)
+    except Exception, e:
+        xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Error from API: '+str(e.status),__icon__))
+        xbmc.log(__addonname__+' - Error from API: '+str(e), xbmc.LOGERROR)
+        return
+        
     if (resp['friends_count'] == 0):
         xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, "No friends found for "+user_id, __icon__))
         return

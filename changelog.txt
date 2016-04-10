@@ -1,3 +1,6 @@
+Version 0.3.1 - April 10, 2016
+- Fixed Kodi behaviour where UI did not react on picture context items
+
 Version 0.3.0 - February 27, 2016
 - Added option to set your username on 500px
 - Added user features. Show your own pictures and galleries.
